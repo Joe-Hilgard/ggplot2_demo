@@ -1,0 +1,82 @@
+Why plot?
+	Statistics are numbers that describe our data for us. (e.g. mean, variance, odds ratio, p-value, ES/CI...)
+	Our purpose in doing statistics, then, is to summarize & describe our data.
+	The same is true of our plots. A good plot communicates as much information to the reader as possible
+What is a bad plot?
+	A bad plot is one that does little to describe our data. For example...
+	(Run through the shitty Excel interaction plot)
+	Why do I think this is a bad plot? We've only fed four pieces of information into it, and four pieces are all we get out
+	You may as well have just put the means in a table and saved some space... 
+	-- I'm smart enough to know that the difference between 9 and 10 is smaller than the diff between 9 and 14.
+What would a better plot tell you?
+	VARIANCE. Everything depends on variance. Plots that don't show uncertainty implicitly claim that r (or r^2) is 1.0.
+	-- STATISTICAL SIGNIFICANCE. Beta = .01 could be signifiant and beta = 23.4 could be insignificant depending on variance
+	DISTRIBUTION. Where's the data at? 68% of our data got thrown away and the rest got folded into averages.
+	-- Do we even have the same amounts of data at EACH of the +/- 1 SD extremes?
+	---- An even more serious question in survey data where you don't have luxury of orthogonality!
+	FIT. Does the linear model fit the data well at all points along the relationship?
+	-- We don't know because there's a huge HERE THERE BE DRAGONS in the middle of our plot
+Why are we so bad at plotting?
+	Exploration / exploitation tradeoff. We found a thing that works (barely) and we'll do it till we're dead.
+	Making figures for figures' sake. Plots as ritual instead of information.
+	Malfeasance? Harder for your audience to know what your data REALLY look like in a bad plot!
+	-- NB: Plotting is a great way to understand your data & discover weirdness (e.g. cutoffs for bad performance, etc)
+	Making good plots seems like too much work.
+
+But it isn't!
+GGPLOT2 can give you a LOT of great, informative plots, very quickly, for very little effort.
+	(but if you're going to be a spaz about finnicky details you'll have to do some work and research)
+
+"Statistical rituals largely eliminate statistical thinking in the social sciences" - Gigerenzer.
+These old plots are just ritual.
+I want to give you a tool that enables you to stop the ritual and begin thinking critically about statistics,
+	and to do so in a way that lets you take creative pride in the results.
+
+Intro to R:
+	Object-oriented	
+	Uses indexes (logical or numeric or even by name)
+	Long data, not wide. "Reshape" package if necessary.
+	Can export and import data as tab-delimited spreadsheets using read.delim and write.table
+	Install custom packages with install.packages('ggplot2')
+	Load custom packages with require(ggplot2)
+The grammar of graphics:
+	stats - a number dependent on your data
+	-- e.g. number of obs w/in a bin, probability density at a point, smoothed fit, identity
+	scales - converts data and stats into drawing units
+	-- e.g. mean of 2 becomes 60 pixels above the axis, or factor A becomes the color blue
+	-- continuous, discrete? between 0 and 1? -100 and +100?
+	-- and coordinate system! cartesian is most common, but polar for pie charts, map of USA...
+	geoms - the objects drawn to represent the stats in the scaled space.
+
+So to sum it all up, a plot is just:
+	Data
+	Statistic of the data
+	Scales & coordinates
+	A geometric object
+
+How do you put these into GGPLOT2? Arguments:
+	data= [your dataset here]
+	The aesthetic wrapper
+	x = x-axis variable
+	y = y-axis variable
+	col= or fill= or pch=
+	cex=
+
+If you want it to vary as a function of the data, it goes INSIDE the aes wrapper
+If you want to set it & forget it for all points on that layer it goes OUTSIDE the wrapper
+
+Default arguments in the base object,
+Specific arguments in the specific object.
+
+How to make a scatterplot
+How to put the continuous predictor in
+Fitting the regression lines
+	Comparing LM with LOESS
+
+Storing ggplots to objects
+Recalling the objects
+	- With additional arguments
+Saving the ggplots to publication-ready images
+
+How to handle two continuous predictors?
+	-You have my blessing to do a little binning. on one, not both.

@@ -136,6 +136,43 @@ ex + stat_bin(geom="line")
 # this showcases the remarkable modularity and flexibility of ggplot2
 ex + stat_bin(geom="line", aes(x=carat, col=cut))
 
+# What about prettying things up, e.g.:
+  # Changing font size
+  # Removing grey background
+  # Converting to B&W
+# All this presentational stuff is mostly handled with "themes"
+# See http://docs.ggplot2.org/current/theme.html for the
+  # full list of all possible theme elements
+# See http://docs.ggplot2.org/dev/vignettes/themes.html for vignette
+
+ex + 
+  stat_bin(geom="line", aes(x=carat, lty=cut)) +
+  theme_bw()
+
+require(grid) # for specifying units in inches, cm, etc.
+ex + 
+  stat_bin(geom="line", aes(x=carat, lty=cut)) +
+  theme(axis.title = element_text(size=24) # change size of axis title
+        , legend.key.size = unit(.7, "inch") # make legend bigger
+        )
+
+# if you don't like dead space outside range, use expand_limits()
+  # set things to zero (or whatever other vector you want)
+ex +
+  stat_bin(geom="line", aes(x=carat, lty=cut)) +
+  expand_limits(x=0, y=0) 
+
+ex +
+  stat_bin(geom="line", aes(x=carat, lty=cut)) +
+  expand_limits(x=c(-1, 10), y=0) 
+
+# You can save a theme to an object for rapid use.
+mytheme = theme(axis.title = element_text(size=24) # change size of axis title
+                , legend.key.size = unit(.7, "inch") # make legend bigger
+)
+
+plot2 + mytheme
+
 # There's plenty more on the internet at docs.ggplot2.org
 # and feel free to email me at jhilgard@gmail.com with your data & code
 # if you need a hand.
