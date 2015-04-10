@@ -32,19 +32,25 @@ dat$caratBin = NULL
 dat$caratBin[dat$carat > mean(dat$carat) + sd(dat$carat)] = "high"
 dat$caratBin[dat$carat < mean(dat$carat) - sd(dat$carat)] = "low"
 dat2 = na.omit(dat)
-tapply(dat2$price, list(dat2$cut, dat2$caratBin), FUN=mean)
-
+table = tapply(dat2$price, list(dat2$cut, dat2$caratBin), FUN=mean)
+table = table[complete.cases(table),]
+barplot(table, beside=T)
 # 68% of your data is within +/-1SD of the mean.
 # When you go to plot, you're gonna throw 68% of your data in
 # the garbage? I'd rather you didn't.
 
 # GGPLOT has two main tools: qplot() "quick plot" and ggplot() "grammar of graphics plot"
-# qplot is simple and effective for most casual applications,
-# ggplot is more precise and rigorous
+# qplot() is simple and effective for most casual applications.
+  # It has reasonable defaults.
+# ggplot() is more precise and rigorous, requiring you to specify more options.
+
+
 qplot(dat$carat, dat$price) # supply two continuous values and qplot intuits a scatterplot
+
 # if you get sick of typing dat$ over and over again, just name the data frame in data=
 # and just tell it what column you want mapped to what feature of the graph
 qplot(x=carat, y=price, col=clarity, data=dat)
+
 # for regression lines we ask for multiple geoms
 # to ask for multiple geoms, use c() to combine them into a vector
 # this will get both point geoms and regression line geoms.
