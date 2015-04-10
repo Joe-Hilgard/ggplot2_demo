@@ -173,6 +173,13 @@ mytheme = theme(axis.title = element_text(size=24) # change size of axis title
 
 plot2 + mytheme
 
+require(tidyr)
+mtcars$car = row.names(mtcars)
+mt = gather(mtcars, key=car)
+ggplot(mt, aes(x=value)) +
+  facet_wrap(~name) +
+  geom_histogram()
+
 # There's plenty more on the internet at docs.ggplot2.org
 # and feel free to email me at jhilgard@gmail.com with your data & code
 # if you need a hand.
