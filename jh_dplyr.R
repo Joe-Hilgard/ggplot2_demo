@@ -1,5 +1,6 @@
 # Brief dplyr example
 library(dplyr)
+library(ggplot2)
 
 # combining rows from different spreadsheets
 dat1 = data.frame(
@@ -39,11 +40,12 @@ mtcars %>%
   filter(cyl == 6) %>%
   select(mpg, am, wt) %>%
   group_by(am) %>%
-  summarise("Mean_Weight" = mean(wt),
+  summarize("Mean_Weight" = mean(wt),
             "Mean_MPG" = mean(mpg)) %>%
   mutate(am = as.factor(am)) %>%
   ggplot(aes(x=am, y=Mean_MPG, fill = am)) +
-  geom_bar(stat="identity")
+  geom_bar(stat="identity") +
+  scale_y_continuous(limits=c(0, 30))
 
 # Sometimes a violin plot can be more informative
 mtcars %>%

@@ -156,15 +156,18 @@ ex +
         , legend.key.size = unit(.7, "inch") # make legend bigger
         )
 
-# if you don't like dead space outside range, use expand_limits()
+# if you don't like dead space outside range, use the 'expand' argument in your axis statement
   # set things to zero (or whatever other vector you want)
+ex + 
+  stat_bin(geom="line", aes(x=carat, lty=cut))
 ex +
   stat_bin(geom="line", aes(x=carat, lty=cut)) +
-  expand_limits(x=0, y=0) 
+  scale_x_continuous(expand=c(0,0)) 
+ex +
+  stat_bin(geom="line", aes(x=carat, lty=cut)) +
+  scale_x_continuous(expand=c(0,0)) +
+  scale_y_continuous(expand=c(0,0))
 
-ex +
-  stat_bin(geom="line", aes(x=carat, lty=cut)) +
-  expand_limits(x=c(-1, 10), y=0) 
 
 # You can save a theme to an object for rapid use.
 mytheme = theme(axis.title = element_text(size=24) # change size of axis title
@@ -173,14 +176,22 @@ mytheme = theme(axis.title = element_text(size=24) # change size of axis title
 
 plot2 + mytheme
 
+
+
+
+
+
+# tidyr and ggplot2 work great together!
 require(tidyr)
 mtcars$car = row.names(mtcars)
-mt = gather(mtcars, key=car)
+mt = gather(mtcars, key=variable, value=value, -car)
+View(mt)
 ggplot(mt, aes(x=value)) +
-  facet_wrap(~name) +
+  facet_wrap(~variable, scales="free_x") +
   geom_histogram()
 
 # There's plenty more on the internet at docs.ggplot2.org
 # and feel free to email me at jhilgard@gmail.com with your data & code
 # if you need a hand.
+
 
