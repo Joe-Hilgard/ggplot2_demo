@@ -7,7 +7,7 @@
 # for further instructions, functions, and arguments.
 
 # install & load ggplot2
-install.packages("ggplot2")
+# install.packages("ggplot2")
 require(ggplot2)
 # store the "diamonds" dataset as object "dat"
 # <- or = takes the stuff on the right and stores it to the object on the left
@@ -152,9 +152,17 @@ ex +
 require(grid) # for specifying units in inches, cm, etc.
 ex + 
   stat_bin(geom="line", aes(x=carat, lty=cut)) +
-  theme(axis.title = element_text(size=24) # change size of axis title
-        , legend.key.size = unit(.7, "inch") # make legend bigger
-        )
+  scale_x_continuous() +
+  theme_bw() +
+  theme(
+    # change size of axis title
+    axis.title = element_text(size=24),
+    # make legend bigger
+    legend.key.size = unit(.7, "inch"), 
+    # remove panel gridlines
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank()
+    )
 
 # if you don't like dead space outside range, use the 'expand' argument in your axis statement
   # set things to zero (or whatever other vector you want)
@@ -170,16 +178,41 @@ ex +
 
 
 # You can save a theme to an object for rapid use.
-mytheme = theme(axis.title = element_text(size=24) # change size of axis title
-                , legend.key.size = unit(.7, "inch") # make legend bigger
+mytheme = 
+  theme(
+    # change size of axis title
+    axis.title = element_text(size=24), 
+    # make legend bigger
+    legend.key.size = unit(.7, "inch") 
 )
-
 plot2 + mytheme
 
 
+# You can retrieve model output,
+  # put it in a data frame,
+  # and use that to plot means & SEs
+model = lm(mpg ~ as.factor(cyl), data=mtcars) # fit model
+summary(model) # model summary
+ls(summary(model)) # what can we grab within that?
+summary(model)$coefficients # aha! b, se(b), t, p
+fit = summary(model)$coefficients # save it to easy-to-access object
 
-
-
+modelDat = 
+  data.frame(
+    "Cylinders" = c(4, 6, 8),
+    # means are grand mean + coefficient
+    "means" = c(fit[1,1], fit[1,1]+fit[2,1], fit[1,1]+fit[3,1]),
+    "ses" = fit[,2]
+  )
+ggplot(modelDat, aes(x=Cylinders)) +
+  geom_bar(stat="identity", aes(y=means)) +
+  geom_errorbar(aes(ymax=means+ses, ymin=means-ses))
+# Note that this is all kind of a pain in the ass compared to
+  # plot methods that don't require you to calculate means & SEs.
+ggplot(mtcars, aes(x=as.factor(cyl), y=mpg)) +
+  geom_violin()
+ggplot(mtcars, aes(x=as.factor(cyl), y=mpg)) +
+  geom_boxplot()
 
 # tidyr and ggplot2 work great together!
 require(tidyr)
