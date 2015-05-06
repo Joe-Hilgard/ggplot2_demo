@@ -85,8 +85,8 @@ qplot(carat, data=dat,
 # to which element or feature of the graph.
 # arguments outside the aes() wrapper are set as constants, as for 
 # alpha transparancy of points here.
-ggplot(dat, aes(x=carat, y=price, col=cut)) + # the base line sets the defaults
-  geom_point(alpha=.5) +
+ggplot(dat, aes(x=carat, y=price)) + # the base line sets the defaults
+  geom_point(alpha=.5, aes(col=cut)) +
   geom_smooth(method=lm) +
   scale_y_continuous(limits=c(0, 20000))
 
@@ -204,6 +204,7 @@ modelDat =
     "means" = c(fit[1,1], fit[1,1]+fit[2,1], fit[1,1]+fit[3,1]),
     "ses" = fit[,2]
   )
+
 ggplot(modelDat, aes(x=Cylinders)) +
   geom_bar(stat="identity", aes(y=means)) +
   geom_errorbar(aes(ymax=means+ses, ymin=means-ses))
@@ -212,14 +213,16 @@ ggplot(modelDat, aes(x=Cylinders)) +
 ggplot(mtcars, aes(x=as.factor(cyl), y=mpg)) +
   geom_violin()
 ggplot(mtcars, aes(x=as.factor(cyl), y=mpg)) +
-  geom_boxplot()
+  geom_boxplot(notch=T)
 
 # tidyr and ggplot2 work great together!
 require(tidyr)
 mtcars$car = row.names(mtcars)
 mt = gather(mtcars, key=variable, value=value, -car)
 View(mt)
-ggplot(mt, aes(x=value)) +
+mt %>%
+  select(-vs, -am, -gear) %>%
+  ggplot(mt, aes(x=value)) +
   facet_wrap(~variable, scales="free_x") +
   geom_histogram()
 
